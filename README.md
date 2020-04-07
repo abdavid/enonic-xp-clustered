@@ -37,7 +37,7 @@ $ docker build . -t snoam-enonic-xp:enonic-dev
 ```
 ####  Run with a spesific dump. 
 Mind that the contents of `data` is expected to be zip files and the argument passed to the image is expected to be the name of the file without the `.zip` extension.
-Add your dump file to /enonic/data folder. Then reference the file name as `${my-dump-name}` in the command below.
+Add your dump file to `data` folder. Then reference the file name as `<MY_DUMP_NAME>` in the command below.
 
 ```
 $ docker run -p8080:8080  --env DUMP_NAME=<MY_DUMP_NAME> --name enonic-local --rm -ti -v $(pwd)/data:/init-data snoam-enonic-xp:enonic-dev

@@ -83,15 +83,6 @@ or rather
 /api/config/my.application/funkytown
 ```  
 
-
-
-
-## Production
-`yarn build`
-
-## Testing
-`yarn test`
-
 ## Other relevant resources
 * Backend
   - [Enonic XP](https://github.schibsted.io/SNOAM/enonic-xp)

@@ -19,6 +19,8 @@ spec:
         app: xp
         type: master
     spec:
+      securityContext:
+        fsGroup: 1337
       containers:
         - name: xp-master
           image: cbt-xp:0.0.29

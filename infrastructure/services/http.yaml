@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: http
+  namespace: enonic
+  labels:
+    app: xp
+
+
+spec:
+  ports:
+    - port: 8080
+      name: http-svc-enonic
+      targetPort: http-enonic
+  selector:
+    app: xp
+    type: combined
+  type: LoadBalancer

@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xp-master
+  namespace: enonic
+  labels:
+    app: xp
+    type: master
+spec:
+  selector:
+    matchLabels:
+      app: xp
+      type: master
+  replicas: 3
+  minReadySeconds: 10
+  template:
+    metadata:
+      labels:
+        app: xp
+        type: master
+    spec:
+      containers:
+        - name: xp-master
+          image: cbt-xp:0.0.29
+          volumeMounts:
+            - mountPath: /tmp-config
+              name: tmp-config-volume
+            - mountPath: /tmp-config/com.enonic.xp.cluster.cfg
+              name: master-xp-config-volume
+              subPath: com.enonic.xp.cluster.cfg
+            - mountPath: /tmp-config/com.enonic.xp.elasticsearch.cfg
+              name: master-xp-config-volume
+              subPath: com.enonic.xp.elasticsearch.cfg
+            - mountPath: /tmp-config/com.enonic.xp.hazelcast.cfg
+              name: master-xp-config-volume
+              subPath: com.enonic.xp.hazelcast.cfg
+            - mountPath: /tmp-config/com.enonic.xp.task.cfg
+              name: master-xp-config-volume
+              subPath: com.enonic.xp.task.cfg
+            - mountPath: /tmp-config/system.properties
+              name: master-xp-config-volume
+              subPath: system.properties
+            - mountPath: /enonic-xp/home/data
+              name: data-persistent-storage
+            - mountPath: /enonic-xp/home/snapshots
+              name: snapshot-persistent-storage
+            - mountPath: /enonic-xp/home/repo/blob
+              name: blob-persistent-storage
+          command: [ "init.sh"]
+          readinessProbe:
+            httpGet:
+              path: /server
+              port: 2609
+            periodSeconds: 15
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 5
+          ports:
+            - containerPort: 8080
+              name: http-enonic
+            - containerPort: 2609
+              name: http-monitoring
+            - containerPort: 9300
+              name: http-elastic
+            - containerPort: 5701
+              name: http-hazel
+      volumes:
+        - name: master-xp-config-volume
+          configMap:
+            name: xp-master-config
+        - name: tmp-config-volume
+          emptyDir: { }
+        - name: data-persistent-storage
+          persistentVolumeClaim:
+            claimName: enonic-xp-data-pv-claim
+        - name: snapshot-persistent-storage
+          persistentVolumeClaim:
+            claimName: enonic-xp-snapshot-pv-claim
+        - name: blob-persistent-storage
+          persistentVolumeClaim:
+            claimName: enonic-xp-blob-pv-claim
+

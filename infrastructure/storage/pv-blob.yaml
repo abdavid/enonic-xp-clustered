@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: enonic-xp-blob-pv-volume
+  labels:
+    type: local
+spec:
+  storageClassName: fast-blob
+  capacity:
+    storage: 20Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: "/Users/davborre/Source/enonic-xp/storage/repo/blob"

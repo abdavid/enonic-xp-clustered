@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hazelcast
+  namespace: enonic
+spec:
+  ports:
+    - port: 5701
+      name: http-svc-hazel
+  selector:
+    app: xp
+  type: ClusterIP
+  clusterIP: None
+  publishNotReadyAddresses: true

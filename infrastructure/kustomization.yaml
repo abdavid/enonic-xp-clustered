@@ -1,0 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: "enonic"
+
+resources:
+  - 00-namespace.yaml
+  - storage/pv-data.yaml
+  - storage/pvc-data.yaml
+  - storage/pv-blob.yaml
+  - storage/pvc-blob.yaml
+  - storage/pv-snapshots.yaml
+  - storage/pvc-snapshots.yaml
+  - services/hazelcast.yaml
+  - services/elastic.yaml
+  - services/monitoring.yaml
+  - services/http.yaml
+  - config/config-backend.yaml
+  - config/config-frontend.yaml
+  - config/config-master.yaml
+  - deployments/deployment-master.yaml
+  - deployments/deployment-backend.yaml
+  - deployments/deployment-frontend.yaml

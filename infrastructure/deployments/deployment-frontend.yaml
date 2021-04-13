@@ -5,25 +5,29 @@ metadata:
   namespace: enonic
   labels:
     app: xp
-    type: combined
+    role: frontend
 spec:
   selector:
     matchLabels:
       app: xp
-      type: combined
+      role: frontend
   replicas: 1
   minReadySeconds: 10
   template:
     metadata:
       labels:
         app: xp
-        type: combined
+        role: frontend
     spec:
-      securityContext:
-        fsGroup: 1337
       containers:
         - name: xp-frontend
           image: cbt-xp:0.0.29
+          env:
+            - name: XP_OPTS
+              value: -Xms921m -Xmx921m
+          resources:
+            limits:
+              memory: 3Gi
           volumeMounts:
             - mountPath: /tmp-config
               name: tmp-config-volume
@@ -39,6 +43,9 @@ spec:
             - mountPath: /tmp-config/com.enonic.xp.web.vhost.cfg
               name: frontend-xp-config-volume
               subPath: com.enonic.xp.web.vhost.cfg
+            - mountPath: /tmp-config/com.enonic.xp.web.sessionstore.cfg
+              name: frontend-xp-config-volume
+              subPath: com.enonic.xp.web.sessionstore.cfg
             - mountPath: /tmp-config/system.properties
               name: frontend-xp-config-volume
               subPath: system.properties
@@ -49,6 +56,11 @@ spec:
             - mountPath: /enonic-xp/home/repo/blob
               name: blob-persistent-storage
           command: [ "init.sh" ]
+          livenessProbe:
+            tcpSocket:
+              port: http-elastic
+            initialDelaySeconds: 20
+            periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /server

@@ -5,7 +5,7 @@ metadata:
   namespace: enonic
   labels:
     app: xp
-    type: combined
+    role: frontend
 spec:
   ports:
     - port: 2609
@@ -13,5 +13,5 @@ spec:
       targetPort: http-monitoring
   selector:
     app: xp
-    type: combined
+    role: frontend
   type: LoadBalancer

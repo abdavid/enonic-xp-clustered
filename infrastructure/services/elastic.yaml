@@ -8,8 +8,7 @@ metadata:
 spec:
   ports:
     - port: 9300
-      name: http-svc-elastic
-      targetPort: http-elastic
+      name: node-to-node
   selector:
     app: xp
   type: NodePort

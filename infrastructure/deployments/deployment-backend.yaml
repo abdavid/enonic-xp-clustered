@@ -5,25 +5,29 @@ metadata:
   namespace: enonic
   labels:
     app: xp
-    type: backend
+    role: backend
 spec:
   selector:
     matchLabels:
       app: xp
-      type: backend
+      role: backend
   replicas: 2
   minReadySeconds: 10
   template:
     metadata:
       labels:
         app: xp
-        type: backend
+        role: backend
     spec:
-      securityContext:
-        fsGroup: 1337
       containers:
         - name: xp-backend
           image: cbt-xp:0.0.29
+          env:
+            - name: XP_OPTS
+              value: -Xms921m -Xmx921m
+          resources:
+            limits:
+              memory: 3Gi
           volumeMounts:
             - mountPath: /tmp-config
               name: tmp-config-volume
@@ -46,6 +50,11 @@ spec:
             - mountPath: /enonic-xp/home/repo/blob
               name: blob-persistent-storage
           command: [ "init.sh"]
+          livenessProbe:
+            tcpSocket:
+              port: http-elastic
+            initialDelaySeconds: 20
+            periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /server

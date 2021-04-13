@@ -5,22 +5,20 @@ metadata:
   namespace: enonic
   labels:
     app: xp
-    type: master
+    role: master
 spec:
   selector:
     matchLabels:
       app: xp
-      type: master
+      role: master
   replicas: 3
   minReadySeconds: 10
   template:
     metadata:
       labels:
         app: xp
-        type: master
+        role: master
     spec:
-      securityContext:
-        fsGroup: 1337
       containers:
         - name: xp-master
           image: cbt-xp:0.0.29
@@ -49,14 +47,17 @@ spec:
             - mountPath: /enonic-xp/home/repo/blob
               name: blob-persistent-storage
           command: [ "init.sh"]
-          readinessProbe:
-            httpGet:
-              path: /server
-              port: 2609
-            periodSeconds: 15
-            timeoutSeconds: 5
-            successThreshold: 1
-            failureThreshold: 5
+          livenessProbe:
+            tcpSocket:
+              port: transport
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          env:
+            - name: XP_OPTS
+              value: -Xms2311m -Xmx2311m
+          resources:
+            limits:
+              memory: 3Gi
           ports:
             - containerPort: 8080
               name: http-enonic

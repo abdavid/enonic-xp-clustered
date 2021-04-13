@@ -17,6 +17,10 @@ data:
     discovery.unicast.hosts=elastic.enonic.svc.cluster.local
     network.host=_eth0:ipv4_
     network.publish.host=_eth0:ipv4_
+  com.enonic.xp.web.sessionstore.cfg: |
+    storeMode = replicated
+    saveOnCreate = true
+    flushOnResponseCommit = true
   com.enonic.xp.web.vhost.cfg: |
     enabled = true
 
@@ -25,10 +29,15 @@ data:
     mapping.adminLocal.target = /
     mapping.adminLocal.idProvider.system = default
 
-    mapping.admin.host = enonic.local
-    mapping.admin.source = /
-    mapping.admin.target = /
-    mapping.admin.idProvider.system = default
+    mapping.conference.host = conference.local
+    mapping.conference.source = /
+    mapping.conference.target = /site/default/master/big-data-conference
+    mapping.conference.idProvider.system = default
+
+    mapping.corp.host = corp.local
+    mapping.corp.source = /
+    mapping.corp.target = /site/default/master/my-corporation
+    mapping.corp.idProvider.system = default
   system.properties: |
     xp.name=Frontend
     xp.suPassword=12345

@@ -11,7 +11,7 @@ spec:
     matchLabels:
       app: xp
       role: master
-  replicas: 3
+  replicas: 0
   minReadySeconds: 10
   template:
     metadata:
@@ -19,6 +19,10 @@ spec:
         app: xp
         role: master
     spec:
+      tolerations:
+        - key: "enonic-only"
+          operator: "Exists"
+          effect: "NoSchedule"
       containers:
         - name: xp-master
           image: cbt-xp:0.0.29
@@ -54,10 +58,10 @@ spec:
             periodSeconds: 10
           env:
             - name: XP_OPTS
-              value: -Xms2311m -Xmx2311m
+              value: -Xms2867m -Xmx2867m
           resources:
             limits:
-              memory: 3Gi
+              memory: 4Gi
           ports:
             - containerPort: 8080
               name: http-enonic

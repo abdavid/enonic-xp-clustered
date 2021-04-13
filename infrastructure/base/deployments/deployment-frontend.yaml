@@ -1,47 +1,57 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: xp-backend
+  name: xp-frontend
   namespace: enonic
   labels:
     app: xp
-    role: backend
+    role: frontend
 spec:
   selector:
     matchLabels:
       app: xp
-      role: backend
-  replicas: 2
+      role: frontend
+  replicas: 1
   minReadySeconds: 10
   template:
     metadata:
       labels:
         app: xp
-        role: backend
+        role: frontend
     spec:
+      tolerations:
+        - key: "enonic-only"
+          operator: "Exists"
+          effect: "NoSchedule"
       containers:
-        - name: xp-backend
+        - name: xp-frontend
           image: cbt-xp:0.0.29
           env:
             - name: XP_OPTS
-              value: -Xms921m -Xmx921m
+              value: -Xms1843m -Xmx1843m
           resources:
             limits:
-              memory: 3Gi
+              memory: 6Gi
           volumeMounts:
             - mountPath: /tmp-config
               name: tmp-config-volume
             - mountPath: /tmp-config/com.enonic.xp.cluster.cfg
-              name: backend-xp-config-volume
+              name: frontend-xp-config-volume
               subPath: com.enonic.xp.cluster.cfg
             - mountPath: /tmp-config/com.enonic.xp.elasticsearch.cfg
-              name: backend-xp-config-volume
+              name: frontend-xp-config-volume
               subPath: com.enonic.xp.elasticsearch.cfg
             - mountPath: /tmp-config/com.enonic.xp.hazelcast.cfg
-              name: backend-xp-config-volume
+              name: frontend-xp-config-volume
               subPath: com.enonic.xp.hazelcast.cfg
+            - mountPath: /tmp-config/com.enonic.xp.web.vhost.cfg
+              name: frontend-xp-config-volume
+              subPath: com.enonic.xp.web.vhost.cfg
+            - mountPath: /tmp-config/com.enonic.xp.web.sessionstore.cfg
+              name: frontend-xp-config-volume
+              subPath: com.enonic.xp.web.sessionstore.cfg
             - mountPath: /tmp-config/system.properties
-              name: backend-xp-config-volume
+              name: frontend-xp-config-volume
               subPath: system.properties
             - mountPath: /enonic-xp/home/data
               name: data-persistent-storage
@@ -49,7 +59,7 @@ spec:
               name: snapshot-persistent-storage
             - mountPath: /enonic-xp/home/repo/blob
               name: blob-persistent-storage
-          command: [ "init.sh"]
+          command: [ "init.sh" ]
           livenessProbe:
             tcpSocket:
               port: http-elastic
@@ -73,9 +83,9 @@ spec:
             - containerPort: 5701
               name: http-hazel
       volumes:
-        - name: backend-xp-config-volume
+        - name: frontend-xp-config-volume
           configMap:
-            name: xp-backend-config
+            name: xp-frontend-config
         - name: tmp-config-volume
           emptyDir: { }
         - name: data-persistent-storage

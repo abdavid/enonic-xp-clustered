@@ -2,10 +2,11 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: enonic-xp-snapshot-pv-claim
+  namespace: enonic
 spec:
-  storageClassName: fast-snapshot
+  volumeName: enonic-xp-snapshot-pv-volume
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 5Gi

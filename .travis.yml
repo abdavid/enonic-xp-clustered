@@ -1,0 +1,11 @@
+language: generic
+group: container
+env:
+  global:
+    - APPLICATION_NAME=enonic-xp
+    - GIT_RESET_IF_BRANCH=${GIT_RESET_IF_BRANCH:-release}
+    - GIT_RESET_BRANCH=${GIT_RESET_BRANCH:-develop}
+    - BRANCH=${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}
+
+script: echo "yay"
+

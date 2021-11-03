@@ -13,7 +13,7 @@ tfPlan() {
 
     [[ $TRAVIS_EVENT_TYPE == "pull_request" ]] && { echo "Skipping plan upload due to the PR"; rm -r $_tmpDir; return; }
     echo "Pushing plan to S3..."
-    aws --region ${TF_ARTIFACTS_REGION:-eu-west-1} s3 cp $_tmpDir/tf.out s3://$TF_ARTIFACTS_S3/$workDir/plans/${TRAVIS_COMMIT}.out
+    aws --region ${TF_ARTIFACTS_REGION:-eu-west-1} s3 cp $_tmpDir/tf.out s3://$TF_ARTIFACTS_S3/ma/staging/enonic/plans/${workDir}/${TRAVIS_COMMIT}.out
 
     rm -r $_tmpDir
 }

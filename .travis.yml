@@ -54,7 +54,7 @@ jobs:
         - WORK_DIRS="infrastructure/stage infrastructure/prod"
     - stage: APPLY
       if: tag =~ ^(apply\/).+ AND fork = false AND type = push
-      <<: *stagePlan
+      <<: *stageApply
       env:
         - WORK_DIRS="infrastructure/stage infrastructure/prod"
 

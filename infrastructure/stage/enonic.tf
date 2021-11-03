@@ -5,7 +5,7 @@ module "enonic-xp" {
   enonic_ami          = "ami-006fdf54c9b918959"
   enonic_docker_image = "enonic/xp:7.6.1-ubuntu"
   enabled_azs         = ["eu-central-1a"]
-  hosted_zone_id      = "Z00839462XXTXF9FCWNHZ"
+  hosted_zone_id      = "Z05981652ZPOCEC46HA9D"
 
   instances = {
     zone-a = module.vpc.subnet_public0

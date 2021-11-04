@@ -56,5 +56,5 @@ jobs:
       if: tag =~ ^(apply\/).+ AND fork = false AND type = push
       <<: *stageApply
       env:
-        - WORK_DIRS="infrastructure/stage infrastructure/prod"
+        - WORK_DIRS="infrastructure/stage"
 

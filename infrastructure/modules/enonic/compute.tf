@@ -80,7 +80,7 @@ resource "aws_iam_role" "enonic_instance" {
             "logs:PutLogEvents"
           ],
           "Effect" : "Allow",
-          "Resource" : "${aws_cloudwatch_log_group.main.arn}:*"
+          "Resource" : "${aws_cloudwatch_log_group.main.arn}:*:*"
         }
       ]
     })

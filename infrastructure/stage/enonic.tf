@@ -17,3 +17,7 @@ module "enonic-xp" {
     module.vpc.subnet_public2,
   ]
 }
+
+output "apps_bucket" {
+  value = module.enonic-xp.apps_bucket
+}

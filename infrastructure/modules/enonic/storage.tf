@@ -21,3 +21,7 @@ resource "aws_ebs_volume" "storage" {
     Group = "enonic-es-volume-${var.environment}"
   }
 }
+
+output "apps_bucket" {
+  value = aws_s3_bucket.app_bucket.bucket
+}

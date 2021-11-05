@@ -68,6 +68,32 @@ resource "aws_iam_role" "enonic_instance" {
       ]
     })
   }
+
+  inline_policy {
+    name = "logs"
+    policy = jsonencode({
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Action" : [
+            "logs:CreateLogStream",
+            "logs:PutLogEvents"
+          ],
+          "Effect" : "Allow",
+          "Resource" : "${aws_cloudwatch_log_group.main.arn}:*"
+        }
+      ]
+    })
+  }
+}
+
+resource "aws_cloudwatch_log_group" "main" {
+  name = "/apps/enonic-xp"
+
+  tags = {
+    Environment = var.environment
+    Application = "enonic-xp"
+  }
 }
 
 resource "aws_security_group" "instance" {

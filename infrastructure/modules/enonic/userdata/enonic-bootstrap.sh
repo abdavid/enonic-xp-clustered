@@ -18,6 +18,9 @@ run_application() {
         -p 2609:2609 \
         -v $mountPoint/home:/enonic-xp/home \
         --restart unless-stopped \
+        --log-driver=awslogs \
+        --log-opt awslogs-region=$awsRegion \
+        --log-opt awslogs-group=/apps/enonic \
         $DOCKER_IMG
 }
 

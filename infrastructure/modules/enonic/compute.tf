@@ -77,10 +77,16 @@ resource "aws_iam_role" "enonic_instance" {
         {
           "Action" : [
             "logs:CreateLogStream",
+          ],
+          "Effect" : "Allow",
+          "Resource" : "${aws_cloudwatch_log_group.main.arn}"
+        },
+        {
+          "Action" : [
             "logs:PutLogEvents"
           ],
           "Effect" : "Allow",
-          "Resource" : "${aws_cloudwatch_log_group.main.arn}:*:*"
+          "Resource" : "${aws_cloudwatch_log_group.main.arn}:log-stream:*"
         }
       ]
     })

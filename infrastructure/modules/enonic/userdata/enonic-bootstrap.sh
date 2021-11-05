@@ -5,6 +5,8 @@ DOCKER_IMG="${dockerImage}"
 awsRegion="${ebsRegion}"
 awsGroup="${ebsGroup}"
 
+cwLogGroup="${logGroup}"
+
 mountPoint="/data"
 destDevice="/dev/xvdh"
 destPartition="$destDevice"1
@@ -20,7 +22,7 @@ run_application() {
         --restart unless-stopped \
         --log-driver=awslogs \
         --log-opt awslogs-region=$awsRegion \
-        --log-opt awslogs-group=/apps/enonic \
+        --log-opt awslogs-group=$cwLogGroup \
         $DOCKER_IMG
 }
 

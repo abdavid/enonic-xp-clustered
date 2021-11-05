@@ -65,3 +65,13 @@ variable "grace_period" {
   type    = number
   default = 300
 }
+
+variable "log_group" {
+  type    = string
+  default = "/apps/enonic-xp"
+}
+
+variable "app_name" {
+  type    = string
+  default = "enonic-xp"
+}

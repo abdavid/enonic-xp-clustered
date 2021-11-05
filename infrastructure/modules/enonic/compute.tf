@@ -77,16 +77,12 @@ resource "aws_iam_role" "enonic_instance" {
         {
           "Action" : [
             "logs:CreateLogStream",
+            "logs:DescribeLogStreams",
+            "logs:PutLogEvents",
+            "logs:GetLogEvents"
           ],
           "Effect" : "Allow",
-          "Resource" : "${aws_cloudwatch_log_group.main.arn}"
-        },
-        {
-          "Action" : [
-            "logs:PutLogEvents"
-          ],
-          "Effect" : "Allow",
-          "Resource" : "${aws_cloudwatch_log_group.main.arn}:log-stream:*"
+          "Resource" : "${aws_cloudwatch_log_group.main.arn}:*"
         }
       ]
     })
@@ -94,11 +90,11 @@ resource "aws_iam_role" "enonic_instance" {
 }
 
 resource "aws_cloudwatch_log_group" "main" {
-  name = "/apps/enonic-xp"
+  name = var.log_group
 
   tags = {
     Environment = var.environment
-    Application = "enonic-xp"
+    Application = var.app_name
   }
 }
 
@@ -148,6 +144,7 @@ resource "aws_launch_configuration" "enonic" {
   user_data = templatefile(format("%s/userdata/enonic-bootstrap.sh", path.module), {
     ebsRegion   = data.aws_region.current.name,
     ebsGroup    = "enonic-es-volume-${var.environment}",
+    logGroup    = var.log_group
     dockerImage = var.enonic_docker_image
     s3Bucket    = aws_s3_bucket.app_bucket.id
   })

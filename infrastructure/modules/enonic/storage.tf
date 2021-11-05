@@ -2,6 +2,10 @@ resource "aws_s3_bucket" "app_bucket" {
   bucket_prefix = "cbt-enonic-apps-${var.environment}"
   acl           = "private"
 
+  versioning {
+     enabled = true
+  }
+
   tags = {
     Name        = "Enonic Apps for ${var.environment}"
     Environment = var.environment

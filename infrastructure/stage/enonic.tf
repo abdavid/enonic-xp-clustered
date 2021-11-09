@@ -1,11 +1,14 @@
+variable "docker_dir" {
+  type = string
+}
 module "enonic-xp" {
   source = "../modules/enonic"
 
-  environment         = "stage"
-  enonic_ami          = "ami-006fdf54c9b918959"
-  enonic_docker_image = "enonic/xp:7.6.1-ubuntu"
-  enabled_azs         = ["eu-central-1a"]
-  hosted_zone_id      = "Z05981652ZPOCEC46HA9D"
+  environment    = "stage"
+  enonic_ami     = "ami-006fdf54c9b918959"
+  docker_dir     = var.docker_dir
+  enabled_azs    = ["eu-central-1a"]
+  hosted_zone_id = "Z05981652ZPOCEC46HA9D"
 
   instances = {
     zone-a = module.vpc.subnet_public0

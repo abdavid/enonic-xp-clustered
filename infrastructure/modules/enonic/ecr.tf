@@ -12,10 +12,10 @@ variable "docker_dir" {
 
 resource "null_resource" "docker_image" {
   provisioner "local-exec" {
-      command = "${path.module}/bin/build_push.sh ${aws_ecr_repository.main.repository_url} ${var.docker_dir}"
+    command = "${path.module}/bin/build_push.sh ${aws_ecr_repository.main.repository_url} ${var.docker_dir}"
   }
 }
 
 data "local_file" "docker_image" {
-    filename = "${path.cwd}/current-docker-image.txt"
+  filename = "${path.cwd}/current-docker-image.txt"
 }

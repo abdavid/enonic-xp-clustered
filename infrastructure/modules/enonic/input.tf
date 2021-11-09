@@ -15,7 +15,7 @@ variable "enonic_ami" {
 
 
 variable "enonic_docker_image" {
-  type = string
+  type    = string
   default = ""
 }
 

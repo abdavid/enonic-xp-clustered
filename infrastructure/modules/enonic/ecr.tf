@@ -17,5 +17,6 @@ resource "null_resource" "docker_image" {
 }
 
 data "local_file" "docker_image" {
+  depends_on = null_resource.docker_image
   filename = "${path.cwd}/current-docker-image.txt"
 }

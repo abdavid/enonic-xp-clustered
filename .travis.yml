@@ -50,6 +50,7 @@ jobs:
       env:
         - WORK_DIRS="infrastructure/stage infrastructure/prod infrastructure/shared"
     - stage: BUILD
+      if: fork = false AND ( branch = "master" OR branch = "feature/terraform" ) AND type = push
       script:
         - ./infrastructure/bin/run.sh plan enonic-xp infrastructure/shared || travis_terminate 1
         - ./infrastructure/bin/run.sh apply enonic-xp infrastructure/shared || travis_terminate 1

@@ -10,6 +10,8 @@ env:
     - TF_ARTIFACTS_S3=sch-cbt-iaac
     - TF_ARTIFACTS_REGION=eu-central-1
     - TF_VAR_docker_dir=$TRAVIS_BUILD_DIR/docker
+    - ECR_ENONIC=953355806585.dkr.ecr.eu-central-1.amazonaws.com/enonic-xp
+    - TF_VAR_enonic_docker_image=${ECR_ENONIC}:${TRAVIS_COMMIT}
     # AWS_ACCESS_KEY_ID
     - secure: "hS5fsJdlFzpq5omzLL1/i3l1mWYtsj2pZDIutbsXtWmey1CK5+HCtmVGk+DGTkF/41P457M+MHYiH5h+5us7nB1PqznqMV6U+Lq9DjjTBmbuVDSeyv64LJGiR6CLk7Msc781ptOaTPKUvHfALHD46eN9ke81qMERbQKdLV8t+L3P38hqmKMNPYBOWwOTsMEaJ2eG+8ZfNc0aXpehVMX/Yc+NjZ5UlDbL1feuL+Ac96PWgNzSEt9bYhRrpCy2/UcPDwyOKdLO4nmMSAVHOLT5W39WyM/H8U8v4PYVmL/9Ij1o2cP0/qGu+ieGOHOXTZWWHwFSDofiPVlzSzh1N+MsHFbpLLK1gCsRZAR2OcvrjGd7knXObF+NbplKf8IK1ymM0OkDzxHKz8M774G8vKV2O6lnzpN48tovo8U2zHrV3IAVWN8v2Uj7nAPhp5GNhdyM1YNmI7zatqIZS1auHK1hlRjFw0jm0otJ6qdurWMqfL1ZdH1tZ40HUjOs5j2zkcmr/FwGysy8ijLqKWIHXCZLm7gvCmmhCZoTOQYd4HjafRieQyzIaTA8yhlqnZlaTdFmEs+i+oMp37GBGUxw9YaXrOAHOTFetkGD5NvaMG29Md5kVZl+vrq/wnjzixpnBy5bEnPWFuvjSv5Szc8AZCtVGttSk6erNj2fhBu4YiRsnBg="
     # AWS_SECRET_ACCESS_KEY
@@ -56,7 +58,7 @@ jobs:
         - ./infrastructure/bin/run.sh apply enonic-xp infrastructure/shared || travis_terminate 1
       deploy:
         provider: script
-        script: docker/build_push.sh ./docker  $(pushd -q infrastructure/shared && terraform output -raw docker_image && popd -q) $TRAVIS_COMMIT
+        script: docker/build_push.sh ./docker $ECR_ENONIC $TRAVIS_COMMIT
         on:
           all_branches: true
     - stage: PLAN

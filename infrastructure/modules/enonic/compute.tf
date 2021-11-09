@@ -145,7 +145,7 @@ resource "aws_launch_configuration" "enonic" {
     ebsRegion   = data.aws_region.current.name,
     ebsGroup    = "enonic-es-volume-${var.environment}",
     logGroup    = var.log_group
-    dockerImage = data.local_file.docker_image.content
+    dockerImage = var.enonic_docker_image
     s3Bucket    = aws_s3_bucket.app_bucket.id
   })
 

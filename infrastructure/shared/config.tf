@@ -8,7 +8,7 @@ terraform {
 
   backend "s3" {
     bucket = "sch-cbt-iaac"
-    key    = "ma/production/enonic/state"
+    key    = "ma/production/enonic-shared/state"
     region = "eu-central-1"
   }
 }

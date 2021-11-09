@@ -48,7 +48,16 @@ jobs:
     - stage: VALIDATE
       <<: *stageValidate
       env:
-        - WORK_DIRS="infrastructure/stage infrastructure/prod"
+        - WORK_DIRS="infrastructure/stage infrastructure/prod infrastructure/shared"
+    - stage: BUILD
+      script:
+        - ./infrastructure/bin/run.sh plan enonic-xp infrastructure/shared || travis_terminate 1
+        - ./infrastructure/bin/run.sh apply enonic-xp infrastructure/shared || travis_terminate 1
+      deploy:
+        provider: script
+        script: docker/build_push.sh ./docker  $(pushd -q infrastructure/shared && terraform output -raw docker_image && popd -q) $TRAVIS_COMMIT
+        on:
+          all_branches: true
     - stage: PLAN
       <<: *stagePlan
       env:

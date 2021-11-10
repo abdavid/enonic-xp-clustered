@@ -103,7 +103,7 @@ resource "aws_iam_role" "enonic_instance" {
           "ecr:DescribeImages",
           "ecr:DescribeRepositories"
         ],
-        "Resource": replace(var.enonic_docker_image, "/:.*", "")
+        "Resource": replace(var.enonic_docker_image, "/:.*/", "")
       },
       {
         "Effect" : "Allow",

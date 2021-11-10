@@ -15,8 +15,8 @@ resource "aws_ecr_repository_policy" "main" {
         "Effect" : "Allow",
         "Principal" : {
           "AWS" : [
-            "arn:aws:iam::953355806585:root",
-            "arn:aws:iam::636059971062:root"
+            "arn:aws:iam::636059971062:root",
+            "arn:aws:iam::953355806585:root"
           ]
         },
         "Action" : [

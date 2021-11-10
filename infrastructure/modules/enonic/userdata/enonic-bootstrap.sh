@@ -14,16 +14,27 @@ destPartition="$destDevice"1
 s3bucket="${s3Bucket}"
 s3mountPoint="/data/home/deploy"
 
+ecr_login() {
+    if [[ "$DOCKER_IMG" =~ dkr.ecr ]]; then
+        echo "Logging into ECR"
+        ecr=${DOCKER_IMG%:*}
+        aws ecr get-login-password --region "${awsRegion}" | docker login --username AWS --password-stdin "${ecr}"
+    else
+        echo "Skipping login. ECR image not found at $DOCKER_IMG"
+    fi
+}
+
 run_application() {
+    ecr_login
     docker run -itd \
         -p 8080:8080 \
         -p 2609:2609 \
         -v $mountPoint/home:/enonic-xp/home \
         --restart unless-stopped \
         --log-driver=awslogs \
-        --log-opt awslogs-region=$awsRegion \
-        --log-opt awslogs-group=$cwLogGroup \
-        $DOCKER_IMG
+        --log-opt awslogs-region="$awsRegion" \
+        --log-opt awslogs-group="$cwLogGroup" \
+        "$DOCKER_IMG"
 }
 
 log_msg() {
@@ -35,12 +46,12 @@ msg_exit() {
     shift
 
     log_msg ERROR "$*"
-    exit $errcode
+    exit "$errcode"
 }
 
 check_exists() {
     checkResource="$1"
-    if [ -b $checkResource ]; then
+    if [ -b "$checkResource" ]; then
         log_msg INFO "Resource $checkResource found."
         return 0 # Everything ok!
     else
@@ -48,7 +59,7 @@ check_exists() {
             log_msg WARN "Resource $checkResource not found. Waiting 10 seconds before second try."
             sleep 10 #Timeout sleep
             log_msg INFO "Checking $checkResource again..."
-            check_exists $checkResource "again"
+            check_exists "$checkResource" "again"
         fi
     fi
 
@@ -138,5 +149,3 @@ if [ $awsBootstrap -eq 0 ]; then
 else
     msg_exit 255 "AWS bootstrap has failed. We should rather kill this instance..."
 fi
-
-# have a fun (run proper service: docker?) configure application to use this storage for databases (not necessairly configuration - but may as well)

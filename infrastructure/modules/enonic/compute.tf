@@ -87,6 +87,34 @@ resource "aws_iam_role" "enonic_instance" {
       ]
     })
   }
+
+  inline_policy {
+    name = "ecr"
+    policy = jsonencode({
+    "Version" : "2008-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "ecr:ListImages",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:BatchGetImage",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:DescribeImages",
+          "ecr:DescribeRepositories"
+        ],
+        "Resource": replace(var.enonic_docker_image, "/:.*", "")
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "ecr:GetAuthorizationToken"
+        ],
+        "Resource": "*"
+      }
+    ]
+  })
+  }
 }
 
 resource "aws_cloudwatch_log_group" "main" {

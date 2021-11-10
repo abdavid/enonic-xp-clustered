@@ -103,7 +103,7 @@ resource "aws_iam_role" "enonic_instance" {
           "ecr:DescribeImages",
           "ecr:DescribeRepositories"
         ],
-        "Resource": replace(var.enonic_docker_image, "/:.*/", "")
+        "Resource": "arn:aws:ecr:${var.enonic_repo.region}:${var.enonic_repo.account_id}:repository/${var.enonic_repo.name}"
       },
       {
         "Effect" : "Allow",

@@ -19,6 +19,11 @@ module "enonic-xp" {
     module.vpc.subnet_public1,
     module.vpc.subnet_public2,
   ]
+  enonic_repo = {
+    name = "enonic-xp",
+    account_id = "953355806585",
+    region = "eu-central-1",
+  }
 }
 
 output "apps_bucket" {

@@ -76,3 +76,11 @@ variable "app_name" {
   type    = string
   default = "enonic-xp"
 }
+
+variable "enonic_repo" {
+  type = object({
+    name = string,
+    account_id = string,
+    region = string,
+  })
+}

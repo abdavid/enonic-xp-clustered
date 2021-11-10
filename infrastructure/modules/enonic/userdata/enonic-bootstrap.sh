@@ -17,8 +17,8 @@ s3mountPoint="/data/home/deploy"
 ecr_login() {
     if [[ "$DOCKER_IMG" =~ dkr.ecr ]]; then
         echo "Logging into ECR"
-        ecr=$${DOCKER_IMG%:*}
-        aws ecr get-login-password --region "${awsRegion}" | docker login --username AWS --password-stdin "${ecr}"
+        ecr="$${DOCKER_IMG%:*}"
+        aws ecr get-login-password --region "$awsRegion" | docker login --username AWS --password-stdin "$ecr"
     else
         echo "Skipping login. ECR image not found at $DOCKER_IMG"
     fi

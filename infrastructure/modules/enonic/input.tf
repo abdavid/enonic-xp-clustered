@@ -79,8 +79,8 @@ variable "app_name" {
 
 variable "enonic_repo" {
   type = object({
-    name = string,
+    name       = string,
     account_id = string,
-    region = string,
+    region     = string,
   })
 }

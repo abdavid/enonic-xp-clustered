@@ -20,9 +20,9 @@ module "enonic-xp" {
     module.vpc.subnet_public2,
   ]
   enonic_repo = {
-    name = "enonic-xp",
+    name       = "enonic-xp",
     account_id = "953355806585",
-    region = "eu-central-1",
+    region     = "eu-central-1",
   }
 }
 

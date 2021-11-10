@@ -91,29 +91,29 @@ resource "aws_iam_role" "enonic_instance" {
   inline_policy {
     name = "ecr"
     policy = jsonencode({
-    "Version" : "2008-10-17",
-    "Statement" : [
-      {
-        "Effect" : "Allow",
-        "Action" : [
-          "ecr:ListImages",
-          "ecr:GetDownloadUrlForLayer",
-          "ecr:BatchGetImage",
-          "ecr:BatchCheckLayerAvailability",
-          "ecr:DescribeImages",
-          "ecr:DescribeRepositories"
-        ],
-        "Resource": "arn:aws:ecr:${var.enonic_repo.region}:${var.enonic_repo.account_id}:repository/${var.enonic_repo.name}"
-      },
-      {
-        "Effect" : "Allow",
-        "Action" : [
-          "ecr:GetAuthorizationToken"
-        ],
-        "Resource": "*"
-      }
-    ]
-  })
+      "Version" : "2008-10-17",
+      "Statement" : [
+        {
+          "Effect" : "Allow",
+          "Action" : [
+            "ecr:ListImages",
+            "ecr:GetDownloadUrlForLayer",
+            "ecr:BatchGetImage",
+            "ecr:BatchCheckLayerAvailability",
+            "ecr:DescribeImages",
+            "ecr:DescribeRepositories"
+          ],
+          "Resource" : "arn:aws:ecr:${var.enonic_repo.region}:${var.enonic_repo.account_id}:repository/${var.enonic_repo.name}"
+        },
+        {
+          "Effect" : "Allow",
+          "Action" : [
+            "ecr:GetAuthorizationToken"
+          ],
+          "Resource" : "*"
+        }
+      ]
+    })
   }
 }
 

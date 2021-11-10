@@ -95,4 +95,3 @@ or rather
   - [antichurn](https://github.schibsted.io/SNOAM/antichurn)
   - [benefits](https://github.schibsted.io/SNOAM/benefits)
   - [choose-subscription](https://github.schibsted.io/SNOAM/choose-subscription)
-

@@ -178,5 +178,12 @@ resource "aws_autoscaling_group" "enonic" {
   lifecycle {
     create_before_destroy = false
   }
+
+  instance_refresh {
+    strategy = "Rolling"
+    preferences {
+      min_healthy_percentage = 0
+    }
+  }
 }
 

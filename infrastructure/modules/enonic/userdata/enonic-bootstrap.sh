@@ -121,7 +121,7 @@ AWS_BOOTSTRAP_PYSCRIPT="aW1wb3J0IGJvdG8zCmltcG9ydCByZXF1ZXN0cwppbXBvcnQgcHByaW50
 log_msg INFO "Executing aws bootstrap script"
 
 amazon-linux-extras install -y epel
-yum install -y s3fs-fuse
+yum install -y s3fs-fuse awscli
 
 pip3 install boto3 requests
 echo $AWS_BOOTSTRAP_PYSCRIPT | base64 -d | python3 - "$awsRegion" "$awsGroup"

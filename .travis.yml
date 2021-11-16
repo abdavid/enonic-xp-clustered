@@ -54,7 +54,7 @@ jobs:
     - stage: BUILD
       if: tag =~ ^(infra\/).+ AND fork = false AND type = push
       env:
-        - ASSUME_ROLE=arn:aws:iam::953355806585:role/cicd/ma-fulladmin
+        - PKR_VAR_assume_role=arn:aws:iam::953355806585:role/cicd/ma-fulladmin
       before_script:
         - curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
         - sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
@@ -65,7 +65,7 @@ jobs:
         - ./infrastructure/bin/run.sh apply enonic-xp infrastructure/shared || travis_terminate 1
       deploy:
         provider: script
-        script: npx -y depstrive execWithAssume -l info -r $ASSUME_ROLE -- docker/build_push.sh ./docker $ECR_ENONIC $TRAVIS_COMMIT
+        script: npx -y depstrive execWithAssume -l info -r $PKR_VAR_assume_role -- docker/build_push.sh ./docker $ECR_ENONIC $TRAVIS_COMMIT
         on:
           all_branches: true
     - stage: PLAN

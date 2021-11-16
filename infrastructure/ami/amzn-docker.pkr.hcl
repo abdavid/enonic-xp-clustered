@@ -11,9 +11,13 @@ locals {
   timestamp = regex_replace(timestamp(), "[- TZ:]", "")
 }
 
+variable "assume_role" {
+  type = string
+}
+
 source "amazon-ebs" "amzn2" {
   assume_role {
-      role_arn     = "arn:aws:iam::953355806585:role/cicd/ma-fulladmin"
+      role_arn     = var.assume_role
       session_name = "packer"
   }
 
@@ -23,7 +27,7 @@ source "amazon-ebs" "amzn2" {
   region        = "eu-central-1"
   source_ami_filter {
     filters = {
-      name                = "amazon/amzn2-ami-*" # */
+      name                = "amzn2-ami-*"
       root-device-type    = "ebs"
       virtualization-type = "hvm"
     }

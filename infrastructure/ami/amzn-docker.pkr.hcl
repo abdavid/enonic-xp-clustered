@@ -7,6 +7,10 @@ packer {
   }
 }
 
+locals {
+  timestamp = regex_replace(timestamp(), "[- TZ:]", "")
+}
+
 source "amazon-ebs" "amzn2" {
   assume_role {
       role_arn     = "arn:aws:iam::953355806585:role/cicd/ma-fulladmin"
@@ -14,7 +18,7 @@ source "amazon-ebs" "amzn2" {
   }
 
   ami_users     = ["636059971062"]
-  ami_name      = "amzn2-ami-hvm-with-docker-{{isotime | clean_resource_name}}"
+  ami_name      = "amzn2-ami-hvm-with-docker-${local.timestamp}"
   instance_type = "t2.micro"
   region        = "eu-central-1"
   source_ami_filter {

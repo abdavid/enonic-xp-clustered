@@ -5,7 +5,6 @@ module "enonic-xp" {
   source = "../modules/enonic"
 
   environment         = "prod"
-  enonic_ami          = "ami-006fdf54c9b918959"
   enonic_docker_image = var.enonic_docker_image
   enabled_azs         = ["eu-central-1a"]
   hosted_zone_id      = "Z060486124RWXT9IBFS7Z"

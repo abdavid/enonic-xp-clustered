@@ -9,11 +9,6 @@ variable "enabled_azs" {
   type = list(any)
 }
 
-variable "enonic_ami" {
-  type = string
-}
-
-
 variable "enonic_docker_image" {
   type    = string
   default = ""

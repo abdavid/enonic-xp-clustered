@@ -59,7 +59,7 @@ build {
   provisioner "shell" {
     inline = [
       "echo Installing Docker",
-      "sudo amazon-linux-extras install docker",
+      "sudo amazon-linux-extras install docker python3.8",
       "sudo service docker start",
       "sudo usermod -a -G docker ec2-user",
       "sudo chkconfig docker on",

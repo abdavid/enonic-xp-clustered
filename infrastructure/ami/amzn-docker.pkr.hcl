@@ -23,7 +23,7 @@ source "amazon-ebs" "amzn2" {
   region        = "eu-central-1"
   source_ami_filter {
     filters = {
-      name                = "amazon/amzn2-ami-hvm-*-x86_64-gp2" # */
+      name                = "amazon/amzn2-ami-*" # */
       root-device-type    = "ebs"
       virtualization-type = "hvm"
     }

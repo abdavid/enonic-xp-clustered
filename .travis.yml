@@ -17,40 +17,17 @@ env:
     # AWS_SECRET_ACCESS_KEY
     - secure: "rQgnr/h9/8Gn6HLbAGdIjZ8ks7rs+fPdtX5fVq/j2RKKzjAU8B3MLLjx+krjD/gKnYDc3NGlGcOV6s6JOWyJsiSH0mpDUtgd5htUpxrJLH2ydSkbJ4PRgQ/AfAqmU0coFKyO0pZCzllqJR7VIbypcEWPg2uZuZJHHl3EZrQzXOqkni0bedtyq6A5Fc8lcMlStjJtMCN1Q4QJYqJCD+mf6Q8D0SoUH3knRVTjegRiKlMCr/Z4PyfMOO292qYTY97HSd+7D+HrraPe2oNrdpCANX1RdXFgdnBu1DfwnmnEgSIaoFOC+ed2hUEThRNZrwYUKaGEnv0R4kHLU+GAohezkmch6uQhYFoG3LZZJ6EHC/sxcwZNMsnicd6wO+MB+d2BmPy0BHfVkQ0avFZXisCWlgM9VMVMY2C34Efns4h5CVwkJDHjz3CXSfmHCrMn+L4c2zDr3khkebviEQd2+iWHYI82LGZCRsbrEcJg8KbJYz85UhN9qCTQL437amVJJCTN0Sam9I+szDH9o2uJMkqmh5Bwgw34gNJzWHU2bJo+9Yu8oHABpWjomS9wZ0wGRz2Wxl4TGeinXfRxH+WSdL3c/FLTlo+MHazgc2z33F53RdzD4MUJ3AwiTPCscYRu7CWBaiItHYtj8XNi4SKIjkwiszqMVfbRrS5nOh75XhIMWyU="
 
-_commons:
-  validate: &stageValidate
-    # Required: not a fork
-    # Either:
-    # - Any pull request
-    # - Not a master branch (includes tags)
-    if: fork = false AND tag IS blank AND ( type = pull_request OR ( type = push AND branch != "master" ) )
-    before_install: *onlyOnProperBranch
-    script: ./infrastructure/bin/run.sh test enonic-xp $WORK_DIRS || travis_terminate 1
-
-  plan: &stagePlan
-    # Required: not a fork
-    # Either:
-    # - A commit to master
-    # - A pull request to master
-    if: fork = false AND ( branch = "master" OR branch = "feature/terraform" ) AND ( type = push OR type = pull_request )
-    before_install: *onlyOnProperBranch
-    script: ./infrastructure/bin/run.sh plan enonic-xp $WORK_DIRS || travis_terminate 1
-
-  apply: &stageApply
-    # Required:
-    # - not a fork
-    # - a commit
-    # - Either apply/domain/ or apply/global/ tag.
-    script: ./infrastructure/bin/run.sh apply enonic-xp $WORK_DIRS || travis_terminate 1
-
 ## Pipeline configuration
 jobs:
   include:
     # On: branches, PRs
     - stage: VALIDATE
-      <<: *stageValidate
+      if: fork = false AND tag IS blank AND ( type = pull_request OR ( type = push AND branch != "master" ) )
+      before_install: *onlyOnProperBranch
+      script: ./infrastructure/bin/run.sh test enonic-xp $WORK_DIRS || travis_terminate 1
       env:
         - WORK_DIRS="infrastructure/stage infrastructure/prod infrastructure/shared"
+
     - stage: BUILD
       if: tag =~ ^(infra\/).+ AND fork = false AND type = push
       env:
@@ -63,18 +40,27 @@ jobs:
         - ./infrastructure/bin/build_ami.sh || travis_terminate 1
         - ./infrastructure/bin/run.sh plan enonic-xp infrastructure/shared || travis_terminate 1
         - ./infrastructure/bin/run.sh apply enonic-xp infrastructure/shared || travis_terminate 1
+
+    - stage: BUILD
+      group: vm
+      services:
+        - docker
       deploy:
         provider: script
         script: npx -y depstrive execWithAssume -l info -r $PKR_VAR_assume_role -- docker/build_push.sh ./docker $ECR_ENONIC $TRAVIS_COMMIT
         on:
           all_branches: true
+
     - stage: PLAN
-      <<: *stagePlan
+      if: fork = false AND ( branch = "master" OR branch = "feature/terraform" OR tag =~ ^(infra\/).+ ) AND ( type = push OR type = pull_request )
+      before_install: *onlyOnProperBranch
+      script: ./infrastructure/bin/run.sh plan enonic-xp $WORK_DIRS || travis_terminate 1
       env:
         - WORK_DIRS="infrastructure/stage"
+
     - stage: APPLY
       if: tag =~ ^(apply\/).+ AND fork = false AND type = push
-      <<: *stageApply
+      script: ./infrastructure/bin/run.sh apply enonic-xp $WORK_DIRS || travis_terminate 1
       env:
         - WORK_DIRS="infrastructure/stage"
 

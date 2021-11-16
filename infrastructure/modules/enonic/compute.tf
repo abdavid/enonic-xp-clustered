@@ -163,6 +163,26 @@ resource "aws_iam_instance_profile" "instance_profile" {
   role        = aws_iam_role.enonic_instance.name
 }
 
+data "aws_ami" "amzn2-docker" {
+  most_recent      = true
+  owners           = ["953355806585"]
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-with-docker-*"]
+  }
+
+  filter {
+    name   = "root-device-type"
+    values = ["ebs"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}
+
 resource "aws_launch_configuration" "enonic" {
   image_id             = var.enonic_ami
   instance_type        = var.instance_type

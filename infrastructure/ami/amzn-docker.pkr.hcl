@@ -72,5 +72,9 @@ build {
     regions       = [var.region]
     identifier    = "amzn2-with-docker-ssm"
     keep_releases = 3
+    assume_role {
+      role_arn     = var.assume_role
+      session_name = "packer-cleaner"
+    }
   }
 }

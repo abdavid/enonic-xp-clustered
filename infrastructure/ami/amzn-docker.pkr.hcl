@@ -14,7 +14,7 @@ source "amazon-ebs" "amzn2" {
   }
 
   ami_users     = ["636059971062"]
-  ami_name      = "amzn2-ami-hvm-with-docker-$(date '+%F_%H-%M')"
+  ami_name      = "amzn2-ami-hvm-with-docker-{{isotime | clean_resource_name}}"
   instance_type = "t2.micro"
   region        = "eu-central-1"
   source_ami_filter {

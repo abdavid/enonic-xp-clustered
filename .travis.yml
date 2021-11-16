@@ -41,6 +41,7 @@ jobs:
         - ./infrastructure/bin/run.sh apply enonic-xp infrastructure/shared || travis_terminate 1
 
     - stage: BUILD
+      if: tag IS blank
       group: vm
       services:
         - docker

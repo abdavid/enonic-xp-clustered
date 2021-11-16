@@ -198,6 +198,10 @@ resource "aws_launch_configuration" "enonic" {
     s3Bucket    = aws_s3_bucket.app_bucket.id
   })
 
+  root_block_device {
+    volume_size = 10
+  }
+
   lifecycle {
     create_before_destroy = true
     ignore_changes = [

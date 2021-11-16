@@ -23,7 +23,6 @@ jobs:
     # On: branches, PRs
     - stage: VALIDATE
       if: fork = false AND tag IS blank AND ( type = pull_request OR ( type = push AND branch != "master" ) )
-      before_install: *onlyOnProperBranch
       script: ./infrastructure/bin/run.sh test enonic-xp $WORK_DIRS || travis_terminate 1
       env:
         - WORK_DIRS="infrastructure/stage infrastructure/prod infrastructure/shared"
@@ -45,15 +44,16 @@ jobs:
       group: vm
       services:
         - docker
+      env:
+        - ASSUME_ROLE=arn:aws:iam::953355806585:role/cicd/ma-fulladmin
       deploy:
         provider: script
-        script: npx -y depstrive execWithAssume -l info -r $PKR_VAR_assume_role -- docker/build_push.sh ./docker $ECR_ENONIC $TRAVIS_COMMIT
+        script: npx -y depstrive execWithAssume -l info -r $ASSUME_ROLE -- docker/build_push.sh ./docker $ECR_ENONIC $TRAVIS_COMMIT
         on:
           all_branches: true
 
     - stage: PLAN
       if: fork = false AND ( branch = "master" OR branch = "feature/terraform" OR tag =~ ^(infra\/).+ ) AND ( type = push OR type = pull_request )
-      before_install: *onlyOnProperBranch
       script: ./infrastructure/bin/run.sh plan enonic-xp $WORK_DIRS || travis_terminate 1
       env:
         - WORK_DIRS="infrastructure/stage"

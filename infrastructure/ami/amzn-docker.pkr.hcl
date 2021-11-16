@@ -4,6 +4,10 @@ packer {
       version = ">= 0.0.2" # "
       source  = "github.com/hashicorp/amazon"
     }
+    amazon-ami-management = {
+      version = "= 1.2.0"
+      source  = "github.com/wata727/amazon-ami-management"
+    }
   }
 }
 
@@ -15,16 +19,21 @@ variable "assume_role" {
   type = string
 }
 
+variable "region" {
+  type    = string
+  default = "eu-central-1"
+}
+
 source "amazon-ebs" "amzn2" {
   assume_role {
-      role_arn     = var.assume_role
-      session_name = "packer"
+    role_arn     = var.assume_role
+    session_name = "packer"
   }
 
   ami_users     = ["636059971062"]
   ami_name      = "amzn2-ami-hvm-with-docker-${local.timestamp}"
   instance_type = "t2.micro"
-  region        = "eu-central-1"
+  region        = var.region
   source_ami_filter {
     filters = {
       name                = "amzn2-ami-*"
@@ -35,6 +44,10 @@ source "amazon-ebs" "amzn2" {
     owners      = ["137112412989"]
   }
   ssh_username = "ec2-user"
+
+  tags = {
+    Amazon_AMI_Management_Identifier = "amzn2-with-docker-ssm"
+  }
 }
 
 build {
@@ -53,5 +66,11 @@ build {
       "sudo yum install -y amazon-ssm-agent",
       "sudo systemctl enable amazon-ssm-agent"
     ]
+  }
+
+  post-processor "amazon-ami-management" {
+    regions       = [var.region]
+    identifier    = "amzn2-with-docker-ssm"
+    keep_releases = 3
   }
 }

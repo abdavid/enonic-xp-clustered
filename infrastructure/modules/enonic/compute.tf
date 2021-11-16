@@ -184,11 +184,10 @@ data "aws_ami" "amzn2-docker" {
 }
 
 resource "aws_launch_configuration" "enonic" {
-  image_id                         = data.aws_ami.amzn2-docker.image_id
-  instance_type                    = var.instance_type
-  iam_instance_profile             = aws_iam_instance_profile.instance_profile.name
-  security_groups                  = [aws_security_group.instance.id]
-  vpc_classic_link_security_groups = []
+  image_id             = data.aws_ami.amzn2-docker.image_id
+  instance_type        = var.instance_type
+  iam_instance_profile = aws_iam_instance_profile.instance_profile.name
+  security_groups      = [aws_security_group.instance.id]
 
   user_data = templatefile(format("%s/userdata/enonic-bootstrap.sh", path.module), {
     ebsRegion   = data.aws_region.current.name,
@@ -200,6 +199,9 @@ resource "aws_launch_configuration" "enonic" {
 
   lifecycle {
     create_before_destroy = true
+    ignore_changes = [
+      vpc_classic_link_security_groups,
+    ]
   }
 }
 

@@ -123,8 +123,8 @@ log_msg INFO "Executing aws bootstrap script"
 amazon-linux-extras install -y epel
 yum install -y s3fs-fuse awscli
 
-pip3 install boto3 requests
-echo $AWS_BOOTSTRAP_PYSCRIPT | base64 -d | python3 - "$awsRegion" "$awsGroup"
+pip3.8 install boto3 requests
+echo $AWS_BOOTSTRAP_PYSCRIPT | base64 -d | python3.8 - "$awsRegion" "$awsGroup"
 
 awsBootstrap=$?
 

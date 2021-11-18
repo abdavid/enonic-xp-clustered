@@ -1,5 +1,43 @@
 # Enonic XP
 
+## Deployment
+
+Deployment contains multiple stages:
+- VALIDATE - validates terraform files
+- BUILD
+  - builds and deploys infrastructure (only on `infra/*` tags)
+  - builds a docker image with enonic-xp
+- PLAN - performs terraform plan and stores it output in S3 bucket
+- APPLY - triggered on `apply/*` tag - applies terraform plan that was stored previously on S3 bucket
+
+Currently it deploys only on stage environment. To add production change `PLAN` stage to plan and apply on stage and plan on production and `APPLY` stage should deploy on production when tagged with `apply/*`
+
+### Useful commands
+
+#### Deploy infrastructure
+
+To deploy infrastructure and (or) build a new AMI image tag your commit with `infra/*` tag. Following command will create dated tag and push changes to the github.
+
+```
+git tag infra/$(date +%Y%m%d%H%M) && git push && git push --tags
+```
+
+
+#### Deploy to production (currently staging)
+
+To deploy the enonic-xp master app you need to tag your commit with `apply/*` tag. Although do it after there is a successful build without tag as tagged flow requires plan to be prepared beforehand. Following command adds and pushes tag to the github:
+
+```
+git tag apply/$(date +%Y%m%d%H%M) && git push --tags
+```
+
+After Travis build is done, you need to manually terminate the instance to make an actual change of environment. This step has an automation potential if required.
+
+
+### Disclaimer
+
+This is just a proposition. Final deployment flow may be different.
+
 ## Development
 
 ##### Hosts file for local enonic integration

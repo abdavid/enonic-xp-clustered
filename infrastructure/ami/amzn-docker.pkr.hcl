@@ -51,12 +51,12 @@ source "amazon-ebs" "amzn2" {
 
   temporary_iam_instance_profile_policy_document {
     Statement {
-        Action   = ["s3:GetObject", "s3:GetObjectVersion"]
-        Effect   = "Allow"
-        Resource = "arn:aws:s3:::sch-cbt-binaries/edr/*"
+      Action   = ["s3:GetObject", "s3:GetObjectVersion"]
+      Effect   = "Allow"
+      Resource = ["arn:aws:s3:::sch-cbt-binaries/edr/*"]
     }
     Version = "2012-10-17"
-}
+  }
 
   tags = {
     Amazon_AMI_Management_Identifier = "amzn2-with-docker-ssm"

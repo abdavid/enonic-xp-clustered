@@ -79,7 +79,7 @@ build {
       "sudo chkconfig docker on",
       "sudo systemctl enable amazon-ssm-agent",
       "aws s3 cp s3://sch-cbt-binaries/edr/falcon-sensor-6.28.0-12504.amzn2.x86_64.rpm /tmp/falcon.rpm",
-      "sudo yum install /tmp/falcon.rpm",
+      "sudo yum install -y /tmp/falcon.rpm",
       "rm /tmp/falcon.rpm",
       "sudo /opt/CrowdStrike/falconctl -s --tags=\"cbt,awsCloud\" --cid=${var.CID}",
       "sudo systemctl enable falcon-sensor"

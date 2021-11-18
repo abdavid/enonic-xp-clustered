@@ -72,7 +72,7 @@ build {
       "aws s3 cp s3://sch-cbt-binaries/edr/falcon-sensor-6.28.0-12504.amzn2.x86_64.rpm /tmp/falcon.rpm",
       "sudo rpm -ivh /tmp/falcon.rpm",
       "rm /tmp/falcon.rpm",
-      "sudo /opt/CrowdStrike/falconctl -s --cid=${var.CID}",
+      "sudo /opt/CrowdStrike/falconctl -s --tags=\"cbt,awsCloud\" --cid=${var.CID}",
       "sudo systemctl enable falcon-sensor"
     ]
   }

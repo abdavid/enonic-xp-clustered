@@ -63,11 +63,11 @@ build {
   provisioner "shell" {
     inline = [
       "echo Installing Docker",
-      "sudo amazon-linux-extras install docker python3.8",
+      "sudo amazon-linux-extras install -y epel docker python3.8",
+      "sudo yum install -y amazon-ssm-agent s3fs-fuse awscli",
       "sudo service docker start",
       "sudo usermod -a -G docker ec2-user",
       "sudo chkconfig docker on",
-      "sudo yum install -y amazon-ssm-agent",
       "sudo systemctl enable amazon-ssm-agent",
       "aws s3 cp s3://sch-cbt-binaries/edr/falcon-sensor-6.28.0-12504.amzn2.x86_64.rpm /tmp/falcon.rpm",
       "sudo rpm -ivh /tmp/falcon.rpm",

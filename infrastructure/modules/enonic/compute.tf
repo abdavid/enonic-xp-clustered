@@ -196,6 +196,7 @@ resource "aws_launch_configuration" "enonic" {
     logGroup    = var.log_group
     dockerImage = var.enonic_docker_image
     s3Bucket    = aws_s3_bucket.app_bucket.id
+    XP_OPTS     = var.XP_OPTS
   })
 
   root_block_device {

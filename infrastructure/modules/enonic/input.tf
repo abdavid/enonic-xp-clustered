@@ -81,6 +81,6 @@ variable "enonic_repo" {
 }
 
 variable "XP_OPTS" {
-  type = string
+  type    = string
   default = "-XX:MinRAMPercentage=75 -XX:MaxRAMPercentage=75 -XX:InitialRAMPercentage=5"
 }

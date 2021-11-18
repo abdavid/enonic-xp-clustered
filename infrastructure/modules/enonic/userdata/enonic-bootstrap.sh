@@ -30,6 +30,7 @@ run_application() {
         -p 8080:8080 \
         -p 2609:2609 \
         -v $mountPoint/home:/enonic-xp/home \
+        -e XP_OPTS="${XP_OPTS}"\
         --restart unless-stopped \
         --log-driver=awslogs \
         --log-opt awslogs-region="$awsRegion" \

@@ -24,6 +24,10 @@ variable "region" {
   default = "eu-central-1"
 }
 
+variable "CID" {
+  type = string
+}
+
 source "amazon-ebs" "amzn2" {
   assume_role {
     role_arn     = var.assume_role
@@ -64,7 +68,12 @@ build {
       "sudo usermod -a -G docker ec2-user",
       "sudo chkconfig docker on",
       "sudo yum install -y amazon-ssm-agent",
-      "sudo systemctl enable amazon-ssm-agent"
+      "sudo systemctl enable amazon-ssm-agent",
+      "aws s3 cp s3://sch-cbt-binaries/edr/falcon-sensor-6.28.0-12504.amzn2.x86_64.rpm /tmp/falcon.rpm",
+      "sudo rpm -ivh /tmp/falcon.rpm",
+      "rm /tmp/falcon.rpm",
+      "sudo /opt/CrowdStrike/falconctl -s --cid=${var.CID}",
+      "sudo systemctl enable falcon-sensor"
     ]
   }
 

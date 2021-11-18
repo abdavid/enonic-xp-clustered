@@ -31,6 +31,8 @@ jobs:
       if: tag =~ ^(infra\/).+ AND fork = false AND type = push
       env:
         - PKR_VAR_assume_role=arn:aws:iam::953355806585:role/cicd/ma-fulladmin
+        # PKR_VAR_CID
+        - secure: "DI9S0ZSzo5jSNhrzNmLdobZGvsHPx5oIP1W6qUsHUj4PSw8I1NLUhQ7/y5Lx9N+ZU1XJRDPXDbPIyI0jMQqP0rCljbCmFKPriuf4LPI2Eo4LJ+jZ7EzyWrptvU5rHV1c99qT1y/9Yr6mjyQSu/dNCdQi/grJudTOrRsak5Mh3Z1huXXgzkaERcDCv8JTxem/trdMFwHOeE2XbQVaEhu0N0cI+89++nKnjbuAFhQUik/Xl4nrocCHTtSxq8wiIVJ4hUGiejm0pTAHyhqiA/pxImPhW9CpdtLlRJtmMQUZtUqkPjAPsmrJbM8+xhOc+VGcHDIGViUHduM3zEEChhiyF/cfqG4yk31QZhFEnBHS1aYmWl7kE9uGHLRitKvLEqfAiAmQsZ8sfnNChAoFeb6EjIz5NlMyqKqnp+h7LHlhBTuimZZ75xc1xPmtz+fwnC6QeuXAUr40XZTBhqTSUz/lH2viZb+SyVAcg7lSspFkgTw5UpBcnYX5mTHVXsq+BHaKckYUuEkJpaWFXTkRv2isnHtyYOSCdaqo/Y2W+besm0otdtdIg8XWGhwp20q7kXYRGJErRpYVwU+buXZDr7iqYuN5KdrixAg2Kx/NpbBao6NRNOKOWPmGiLSDvE7/r1dgXlVpyrrkbJpl9fc/FiR40/5t/DLMUD+3/rrXcJZXGP0="
       before_script:
         - curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
         - sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"

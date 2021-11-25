@@ -7,12 +7,14 @@ awsGroup="${ebsGroup}"
 
 cwLogGroup="${logGroup}"
 
-mountPoint="/data"
+mountPoint="/data/nvm"
 destDevice="/dev/xvdh"
 destPartition="$destDevice"1
 
 s3bucket="${s3Bucket}"
-s3mountPoint="/data/home/deploy"
+s3mountPoint="/data/s3"
+
+xpHome="/enonic-xp/home"
 
 ecr_login() {
     if [[ "$DOCKER_IMG" =~ dkr.ecr ]]; then
@@ -29,8 +31,11 @@ run_application() {
     docker run -itd \
         -p 8080:8080 \
         -p 2609:2609 \
-        -v $mountPoint/home:/enonic-xp/home \
-        -e XP_OPTS="${XP_OPTS}"\
+        --mount type=bind,source=${mountPoint}/home:${xpHome} \
+        --mount type=bind,source=${s3mountPoint}/config,target=${xpHome}/config \
+        --mount type=bind,source=${s3mountPoint}/deploy,target=${xpHome}/deploy \
+        --mount type=bind,source=${s3mountPoint}/snapshots,target=${xpHome}/snapshots \
+        -e XP_OPTS="${XP_OPTS}" \
         --restart unless-stopped \
         --log-driver=awslogs \
         --log-opt awslogs-region="$awsRegion" \
@@ -102,6 +107,7 @@ prepare_partition_mount() {
     echo "$destPartition $mountPoint	 ext4	defaults	0 0" | tee -a /etc/fstab
     log_msg INFO "Mounting partition $destPartition on $mountPoint"
     mkdir -p $mountPoint
+    chown 1337 $mountPoint
     mount $destPartition $mountPoint || return 1
 }
 
@@ -109,8 +115,8 @@ prepare_s3_mount() {
     echo "# S3fs app storage" | tee -a /etc/fstab
     echo "$s3bucket $s3mountPoint fuse.s3fs _netdev,allow_other,iam_role=auto 0 0" | tee -a /etc/fstab
 
-    mkdir -p $s3mountPoint
-    chown 1337 $mountPoint/home
+    mkdir -p $s3mountPoint/{config,deploy,snapshots}
+    chown -R 1337 $s3mountPoint
     mount $s3mountPoint || return 1
 }
 

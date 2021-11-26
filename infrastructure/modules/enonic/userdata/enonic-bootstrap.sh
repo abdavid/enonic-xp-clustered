@@ -31,10 +31,10 @@ run_application() {
     docker run -itd \
         -p 8080:8080 \
         -p 2609:2609 \
-        --mount type=bind,source=${mountPoint}/home:${xpHome} \
-        --mount type=bind,source=${s3mountPoint}/config,target=${xpHome}/config \
-        --mount type=bind,source=${s3mountPoint}/deploy,target=${xpHome}/deploy \
-        --mount type=bind,source=${s3mountPoint}/snapshots,target=${xpHome}/snapshots \
+        --mount type=bind,source=$mountPoint/home:$xpHome \
+        --mount type=bind,source=$s3mountPoint/config,target=$xpHome/config \
+        --mount type=bind,source=$s3mountPoint/deploy,target=$xpHome/deploy \
+        --mount type=bind,source=$s3mountPoint/snapshots,target=$xpHome/snapshots \
         -e XP_OPTS="${XP_OPTS}" \
         --restart unless-stopped \
         --log-driver=awslogs \

@@ -100,10 +100,5 @@ resource "aws_lb_listener_rule" "version_info" {
     path_pattern {
       values = ["/_info"]
     }
-
-    query_string {
-      key   = "health"
-      value = "check"
-    }
   }
 }

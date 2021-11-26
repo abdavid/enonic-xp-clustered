@@ -115,9 +115,11 @@ prepare_s3_mount() {
     echo "# S3fs app storage" | tee -a /etc/fstab
     echo "$s3bucket $s3mountPoint fuse.s3fs _netdev,allow_other,iam_role=auto 0 0" | tee -a /etc/fstab
 
-    mkdir -p $s3mountPoint/{config,deploy,snapshots}
-    chown -R 1337 $s3mountPoint
+    mkdir -p $s3mountPoint
+    chown 1337 $s3mountPoint
     mount $s3mountPoint || return 1
+
+    mkdir -p $s3mountPoint/{config,deploy,snapshots}
 }
 
 #Base64 encoded python script / Unfortunatelly it must be base64 encoded

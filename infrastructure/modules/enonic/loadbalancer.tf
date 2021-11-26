@@ -84,7 +84,7 @@ resource "aws_alb_listener" "listener_https" {
 }
 
 resource "aws_lb_listener_rule" "version_info" {
-  listener_arn = aws_lb_listener.listener_https.arn
+  listener_arn = aws_alb_listener.listener_https.arn
 
   action {
     type = "fixed-response"

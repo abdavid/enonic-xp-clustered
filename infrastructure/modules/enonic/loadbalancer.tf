@@ -75,10 +75,35 @@ resource "aws_alb_listener" "listener_https" {
   load_balancer_arn = aws_alb.alb.arn
   port              = "443"
   protocol          = "HTTPS"
-  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  ssl_policy        = "ELBSecurityPolicy-FS-1-2-Res-2020-10"
   certificate_arn   = aws_acm_certificate.enonic.arn
   default_action {
     target_group_arn = aws_alb_target_group.group.arn
     type             = "forward"
+  }
+}
+
+resource "aws_lb_listener_rule" "version_info" {
+  listener_arn = aws_lb_listener.listener_https.arn
+
+  action {
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/plain"
+      message_body = var.info_commit
+      status_code  = "200"
+    }
+  }
+
+  condition {
+    path_pattern {
+      values = ["/_info"]
+    }
+
+    query_string {
+      key   = "health"
+      value = "check"
+    }
   }
 }

@@ -62,6 +62,10 @@ variable "grace_period" {
   default = 300
 }
 
+variable "info_commit" {
+  type    = string
+}
+
 variable "log_group" {
   type    = string
   default = "/apps/enonic-xp"

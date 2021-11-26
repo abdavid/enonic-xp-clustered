@@ -1,6 +1,9 @@
 variable "enonic_docker_image" {
   type = string
 }
+variable "commit" {
+  type = string
+}
 module "enonic-xp" {
   source = "../modules/enonic"
 
@@ -8,6 +11,8 @@ module "enonic-xp" {
   enonic_docker_image = var.enonic_docker_image
   enabled_azs         = ["eu-central-1a"]
   hosted_zone_id      = "Z05981652ZPOCEC46HA9D"
+
+  info_commit = var.commit
 
   instances = {
     zone-a = module.vpc.subnet_public0

@@ -10,6 +10,7 @@ env:
     - TF_ARTIFACTS_S3=sch-cbt-iaac
     - TF_ARTIFACTS_REGION=eu-central-1
     - TF_VAR_docker_dir=$TRAVIS_BUILD_DIR/docker
+    - TF_VAR_commit=$TRAVIS_COMMIT
     - TV_VAR_XP_OPTS="-XX:MinRAMPercentage=75 -XX:MaxRAMPercentage=75 -XX:InitialRAMPercentage=5"
     - ECR_ENONIC=953355806585.dkr.ecr.eu-central-1.amazonaws.com/enonic-xp
     - TF_VAR_enonic_docker_image=${ECR_ENONIC}:${TRAVIS_COMMIT}

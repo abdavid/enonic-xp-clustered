@@ -57,14 +57,22 @@ jobs:
         on:
           all_branches: true
 
-    - stage: PLAN
-      if: fork = false AND ( branch = "master" OR branch = "feature/terraform" OR tag =~ ^(infra\/).+ ) AND ( type = push OR type = pull_request )
-      script: ./infrastructure/bin/run.sh plan enonic-xp $WORK_DIRS || travis_terminate 1
+    - stage: DEPLOY STAGE
+      if: fork = false AND ( branch = "master" OR branch = "feature/terraform" OR tag =~ ^(infra\/).+ ) AND ( type = push )
+      script:
+        - ./infrastructure/bin/run.sh plan enonic-xp $WORK_DIRS || travis_terminate 1
+        - ./infrastructure/bin/run.sh apply enonic-xp $WORK_DIRS || travis_terminate 1
       env:
         - WORK_DIRS="infrastructure/stage"
 
-    - stage: APPLY
+    - stage: PLAN PROD
+      if: fork = false AND ( branch = "master" OR branch = "feature/terraform" OR tag =~ ^(infra\/).+ ) AND ( type = push OR type = pull_request )
+      script: ./infrastructure/bin/run.sh plan enonic-xp $WORK_DIRS || travis_terminate 1
+      env:
+        - WORK_DIRS="infrastructure/prod"
+
+    - stage: DEPLOY PROD
       if: tag =~ ^(apply\/).+ AND fork = false AND type = push
       script: ./infrastructure/bin/run.sh apply enonic-xp $WORK_DIRS || travis_terminate 1
       env:
-        - WORK_DIRS="infrastructure/stage"
+        - WORK_DIRS="infrastructure/prod"

@@ -12,6 +12,24 @@ resource "aws_s3_bucket" "app_bucket" {
   }
 }
 
+resource "aws_s3_bucket_object" "config_dir" {
+  bucket = aws_s3_bucket.app_bucket.id
+  key = "config/.keep"
+  content = "fakedir"
+}
+
+resource "aws_s3_bucket_object" "deploy_dir" {
+  bucket = aws_s3_bucket.app_bucket.id
+  key = "deploy/.keep"
+  content = "fakedir"
+}
+
+resource "aws_s3_bucket_object" "snapshots_dir" {
+  bucket = aws_s3_bucket.app_bucket.id
+  key = "snapshots/.keep"
+  content = "fakedir"
+}
+
 resource "aws_ebs_volume" "storage" {
   for_each          = { for az in var.enabled_azs : az => az }
   availability_zone = each.key

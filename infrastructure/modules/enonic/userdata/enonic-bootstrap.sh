@@ -118,8 +118,6 @@ prepare_s3_mount() {
     mkdir -p $s3mountPoint
     chown 1337 $s3mountPoint
     mount $s3mountPoint || return 1
-
-    mkdir -p $s3mountPoint/{config,deploy,snapshots}
 }
 
 #Base64 encoded python script / Unfortunatelly it must be base64 encoded
